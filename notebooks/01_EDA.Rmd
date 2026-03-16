@@ -1,0 +1,51 @@
+---
+title: "01 - EDA"
+output: html_document
+---
+
+```{r setup, message=FALSE, warning=FALSE}
+library(data.table)
+library(tidyverse)
+library(plotly)
+source("scripts/utils/data_loader.R")
+core <- load_core_data(getwd())
+```
+
+## Portfolio Overview
+
+```{r}
+core$policies %>% summarise(
+  policy_count = n_distinct(policy_id),
+  total_payroll = sum(payroll),
+  avg_employees = mean(employees)
+)
+```
+
+## Claim Frequency Distribution
+
+```{r}
+freq <- core$claims %>% count(policy_id, name = "claim_count")
+ggplot(freq, aes(x = claim_count)) +
+  geom_histogram(binwidth = 1, fill = "#355070", color = "white") +
+  labs(title = "Claim Frequency Distribution")
+```
+
+## Claim Severity Distribution
+
+```{r}
+ggplot(core$claims, aes(x = ultimate_loss)) +
+  geom_histogram(bins = 60, fill = "#6d597a", color = "white") +
+  scale_x_log10() +
+  labs(title = "Claim Severity (log scale)")
+```
+
+## Industry Mix
+
+```{r}
+core$policies %>%
+  count(naics_description, sort = TRUE) %>%
+  ggplot(aes(x = reorder(naics_description, n), y = n)) +
+  geom_col(fill = "#b56576") +
+  coord_flip() +
+  labs(title = "NAICS Portfolio Composition", x = NULL, y = "Policy count")
+```

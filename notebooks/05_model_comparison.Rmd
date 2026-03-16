@@ -1,0 +1,26 @@
+---
+title: "05 - Model Comparison"
+output: html_document
+---
+
+```{r setup, message=FALSE, warning=FALSE}
+library(data.table)
+library(ggplot2)
+metrics <- fread("results/model_metrics.csv")
+lift <- fread("results/lift_charts.csv")
+```
+
+## Model Performance Metrics
+
+```{r}
+metrics
+```
+
+## Lift Curves by Model
+
+```{r}
+ggplot(lift, aes(x = risk_decile, y = actual_loss_cost, color = model)) +
+  geom_line(size = 1.1) +
+  geom_point() +
+  labs(title = "Actual Loss Cost by Predicted Risk Decile")
+```

@@ -1,0 +1,25 @@
+---
+title: "02 - Frequency Modelling"
+output: html_document
+---
+
+```{r setup, message=FALSE, warning=FALSE}
+library(data.table)
+source("scripts/utils/data_loader.R")
+source("scripts/utils/feature_engineering.R")
+core <- load_core_data(getwd())
+model_df <- build_modelling_dataset(core$policies, core$exposures, core$claims)
+split <- split_train_test(model_df)
+```
+
+## Poisson Frequency GLM
+
+```{r}
+freq_glm <- glm(
+  claim_count ~ payroll + employees + years_in_business + prior_claims + naics_code + state,
+  family = poisson(link = "log"),
+  offset = log(pmax(exposure, 1e-4)),
+  data = as.data.frame(split$train)
+)
+summary(freq_glm)
+```

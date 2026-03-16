@@ -1,0 +1,15 @@
+source("scripts/evaluation/lift_chart.R")
+source("scripts/evaluation/calibration.R")
+source("scripts/evaluation/exposure_analysis.R")
+source("scripts/evaluation/shap_analysis.R")
+
+lift <- build_lift_chart()
+cal <- build_calibration()
+exp_analysis <- build_exposure_analysis()
+shap_imp <- build_shap_importance()
+
+message("Evaluation complete")
+message("lift rows: ", nrow(lift))
+message("calibration rows: ", nrow(cal))
+message("exposure rows: ", nrow(exp_analysis))
+message("shap rows: ", nrow(shap_imp))

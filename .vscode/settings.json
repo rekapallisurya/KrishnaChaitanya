@@ -1,0 +1,5 @@
+{
+  "terminal.integrated.env.windows": {
+    "PATH": "C:\\Program Files\\R\\R-4.4.1\\bin\\x64;${env:PATH}"
+  }
+}

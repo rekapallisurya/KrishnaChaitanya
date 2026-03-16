@@ -1,0 +1,25 @@
+---
+title: "04 - Tweedie Model"
+output: html_document
+---
+
+```{r setup, message=FALSE, warning=FALSE}
+library(data.table)
+library(mgcv)
+source("scripts/utils/data_loader.R")
+source("scripts/utils/feature_engineering.R")
+core <- load_core_data(getwd())
+model_df <- build_modelling_dataset(core$policies, core$exposures, core$claims)
+split <- split_train_test(model_df)
+```
+
+## GAM Tweedie Fit
+
+```{r}
+gam_fit <- mgcv::gam(
+  total_loss ~ s(payroll) + s(employees) + s(years_in_business) + s(prior_claims) + naics_code + state + offset(log(pmax(exposure, 1e-4))),
+  family = mgcv::tw(link = "log"),
+  data = as.data.frame(split$train)
+)
+summary(gam_fit)
+```

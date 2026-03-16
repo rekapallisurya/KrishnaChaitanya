@@ -1,0 +1,10 @@
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+.Renviron
+.Rprofile
+.Rbuildignore
+renv/library/
+renv/staging/
+*.Rproj
